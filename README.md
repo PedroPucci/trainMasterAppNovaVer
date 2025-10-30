@@ -59,3 +59,28 @@ Contém os endpoints para acesso e execução das funcionalidades:
 - **Screens**: Composta pelo arquivo tsx e ts de todas as telas.
 - **Theme**: Pasta formada pelo arquivo tsx do componente para escurecer/clarear a tela.
 
+TrainMaster App – Integração Contínua e Testes Automatizados
+
+Este repositório utiliza um fluxo de CI/CD integrado entre GitHub e GitLab para garantir qualidade e confiabilidade no desenvolvimento.
+
+🔄 Fluxo de Integração Contínua
+
+Cada push realizado na branch main do GitHub dispara automaticamente um webhook configurado no GitLab.
+
+O GitLab CI/CD executa a pipeline de testes automatizados, sem necessidade de gerar manualmente artefatos locais.
+
+Os testes são executados com o Maestro, garantindo a validação da aplicação em ambiente simulado.
+
+📊 Relatórios
+
+Após a execução, relatórios são salvos automaticamente, permitindo análise detalhada da saúde do projeto.
+
+Falhas em testes interrompem a pipeline e alertam a equipe de desenvolvimento.
+
+🚀 Benefícios
+
+Automação completa desde o push até a validação da aplicação.
+
+Feedback rápido, evitando que falhas cheguem à produção.
+
+Escalabilidade, permitindo que múltiplos testes rodem em paralelo.
