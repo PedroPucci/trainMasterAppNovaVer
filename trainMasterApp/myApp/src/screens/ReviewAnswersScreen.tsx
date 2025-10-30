@@ -4,16 +4,28 @@ import AppHeader from "../components/header/AppHeader";
 import { useAppTheme } from "../components/theme/ThemeProvider";
 import type { Question } from "../components/QuestionRunner/QuestionRunner";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { AprendizadoStackParamList } from "../components/navigation/RootTabs";
+import { useNavigation } from "@react-navigation/native";
+import { ResultParams } from "./ResultScreen";
 
 
 export type ReviewParams = {
-    mode: "exam" | "exercise";
+    mode: string;
     title?: string;
+    percent:number;
+    correct:number;
+    total:number;
+    elapsedSec:number;
+    passThreshold:number;
     questions: Question[];
     answers: Record<string, string[]>; // questionId -> opções escolhidas
 };
 
+type Nav = NativeStackNavigationProp<AprendizadoStackParamList, "Result">;
+
 export default function ReviewAnswersScreen({ route, navigation }: any) {
+    const nav = useNavigation<Nav>();
     const { mode, title, questions, answers } = route.params as ReviewParams;
     const { theme } = useAppTheme();
     const isDark = theme.name === "dark";
@@ -23,6 +35,25 @@ export default function ReviewAnswersScreen({ route, navigation }: any) {
     const [successModal, setSuccessModal] = React.useState(false);
 
     const total = questions.length;
+    // 👉 método que fecha o modal e navega
+
+    // 👉 método que fecha o modal e navega
+    const handleConfirm = () => {
+        setSuccessModal(false);
+
+        // simulação de dados; substitua pelos valores reais
+        const mockResult: ResultParams= {
+            mode: "exam",
+            percent: 85,
+            correct: 45,
+            total: 50,
+            elapsedSec: 1160,
+            passThreshold: 70,
+        };
+
+        // navega para a tela de resultado
+        nav.navigate("Result", mockResult);
+    };
 
     const renderRow = ({ item, index }: { item: Question; index: number }) => {
         const selected = answers[item.id] ?? [];
@@ -117,7 +148,7 @@ export default function ReviewAnswersScreen({ route, navigation }: any) {
                                     st.primaryButton,
                                     { backgroundColor: "#50C2C9", flex: 1, marginLeft: 8 },
                                 ]}
-                                onPress={() => setSuccessModal(false)}
+                                onPress={handleConfirm }
                             >
                                 <Text style={st.primaryButtonText}>Sim</Text>
                             </Pressable>

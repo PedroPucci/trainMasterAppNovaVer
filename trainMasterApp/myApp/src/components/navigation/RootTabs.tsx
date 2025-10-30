@@ -26,6 +26,7 @@ import ReviewAnswersScreen, { ReviewParams } from "../../screens/ReviewAnswersSc
 import { Course } from "../../services";
 import { CourseOverviewParams } from "../../screens/CourseOverviewScreen";
 import CourseOverviewScreen from "../../screens/CourseOverviewScreen";  // import para tela de visão do curso
+import ResultScreen, { ResultParams } from "../../screens/ResultScreen";
 
 
 // 1) Tipos das rotas da Tab (nomes das abas)
@@ -50,10 +51,11 @@ const Tab = createBottomTabNavigator<TabParamList>();
 // 3.1) Stack da aba "Aprendizado"
 export type AprendizadoStackParamList = {
   AprendizadoHome: undefined;          // lista de cursos matriculados
-  CourseDetail: { course: Course};        // detalhe do curso (não aparece na Tab)
+  CourseDetail: { course: Course };        // detalhe do curso (não aparece na Tab)
   CourseOverview: CourseOverviewParams;
-  QuestionFlow:QuestionFlowParams;
+  QuestionFlow: QuestionFlowParams;
   ReviewAnswers: ReviewParams;
+  Result: ResultParams;
 };
 const AprendizadoStackNav = createNativeStackNavigator<AprendizadoStackParamList>();
 
@@ -73,13 +75,17 @@ function AprendizadoStack() {
         name="CourseOverview"
         component={CourseOverviewScreen}
       />
-       <AprendizadoStackNav.Screen
+      <AprendizadoStackNav.Screen
         name="QuestionFlow"
         component={QuestionFlowScreen}
       />
-             <AprendizadoStackNav.Screen
+      <AprendizadoStackNav.Screen
         name="ReviewAnswers"
         component={ReviewAnswersScreen}
+      />
+        <AprendizadoStackNav.Screen
+        name="Result"
+        component={ResultScreen}
       />
     </AprendizadoStackNav.Navigator>
   );
