@@ -6,7 +6,7 @@ import { useAppTheme } from "../../components/theme/ThemeProvider";
 
 export type Mode = "exam" | "exercise";
 
-export type Option = { id: string; text: string };
+export type Option = { id: string; text: string, isCorrect:boolean };
 export type Question = {
   id: string;
   title?: string;

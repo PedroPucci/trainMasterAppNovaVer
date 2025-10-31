@@ -11,47 +11,78 @@ import { ResultParams } from "./ResultScreen";
 
 
 export type ReviewParams = {
-    mode: string;
+    mode: "exam" | "exercise";
     title?: string;
-    percent:number;
-    correct:number;
-    total:number;
-    elapsedSec:number;
-    passThreshold:number;
+    percent: number;
+    correct: number;
+    total: number;
+    elapsedSec: number;
+    passThreshold: number;
     questions: Question[];
     answers: Record<string, string[]>; // questionId -> opções escolhidas
 };
 
+type ResultadoAvaliação = {
+    totalPerguntas: number;
+    totalAcertos: number;
+    percentualAcertos: number;
+};
+
 type Nav = NativeStackNavigationProp<AprendizadoStackParamList, "Result">;
+
+function contarAcertos(
+    perguntas: Question[],
+    respostas: Record<string, Array<number | string>>
+): ResultadoAvaliação {
+    let acertos = 0;
+
+    for (const pergunta of perguntas) {
+        // garante acesso pela chave string
+        const respostasUsuarioRaw = respostas[String(pergunta.id)] ?? [];
+        // normaliza para string para comparar sem erro de tipo
+        const respostasUsuario = respostasUsuarioRaw.map(v => String(v));
+
+        const corretas = pergunta.options
+            .filter(o => o.isCorrect)
+            .map(o => String(o.id)); // normaliza para string também
+
+        const acertou =
+            corretas.length === respostasUsuario.length &&
+            corretas.every(id => respostasUsuario.includes(id));
+
+        if (acertou) acertos++;
+    }
+
+    const totalPerguntas = perguntas.length;
+    const percentualAcertos =
+        totalPerguntas > 0 ? Number(((acertos / totalPerguntas) * 100).toFixed(2)) : 0;
+
+    return { totalPerguntas, totalAcertos: acertos, percentualAcertos };
+}
 
 export default function ReviewAnswersScreen({ route, navigation }: any) {
     const nav = useNavigation<Nav>();
-    const { mode, title, questions, answers } = route.params as ReviewParams;
+    const { mode, title, questions, answers,elapsedSec } = route.params as ReviewParams;
     const { theme } = useAppTheme();
     const isDark = theme.name === "dark";
     const hardBg = isDark ? "#0B0B0B" : "#EFF4F3";
     const cardBg = isDark ? "#111" : "#FFFFFF";
     const text = isDark ? "#fff" : "#111827";
     const [successModal, setSuccessModal] = React.useState(false);
-
+    console.log(elapsedSec)
     const total = questions.length;
-    // 👉 método que fecha o modal e navega
-
-    // 👉 método que fecha o modal e navega
     const handleConfirm = () => {
         setSuccessModal(false);
-
-        // simulação de dados; substitua pelos valores reais
-        const mockResult: ResultParams= {
-            mode: "exam",
-            percent: 85,
-            correct: 45,
-            total: 50,
-            elapsedSec: 1160,
+        const result = contarAcertos(questions, answers);
+        const mockResult: ResultParams = {
+            mode,
+            percent: result.percentualAcertos,
+            correct: result.totalAcertos,
+            total: result.totalPerguntas,
+            elapsedSec: elapsedSec,
             passThreshold: 70,
         };
 
-        // navega para a tela de resultado
         nav.navigate("Result", mockResult);
     };
 
@@ -148,7 +179,7 @@ export default function ReviewAnswersScreen({ route, navigation }: any) {
                                     st.primaryButton,
                                     { backgroundColor: "#50C2C9", flex: 1, marginLeft: 8 },
                                 ]}
-                                onPress={handleConfirm }
+                                onPress={handleConfirm}
                             >
                                 <Text style={st.primaryButtonText}>Sim</Text>
                             </Pressable>

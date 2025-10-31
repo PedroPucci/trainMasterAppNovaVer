@@ -51,7 +51,6 @@ export default function ResultScreen() {
 
     const passed = percent >= passThreshold;
 
-    // Título da barra e mensagens centrais (cobre os 4 layouts)
     const headerTitle = mode === "exam" ? "Resultado" : "Questões";
     const topMessage =
         mode === "exam"
@@ -79,11 +78,12 @@ export default function ResultScreen() {
             <AppHeader userName="Lydia" onLogout={() => { }} />
 
             <View style={[st.wrap, { paddingBottom: Math.max(insets.bottom + 24, 24) }]}>
-                <Text style={[st.h2, { color: "#4B5563", marginTop: 12 }]}>{topMessage}</Text>
+                <Text style={[st.title, { color: hardText }]}>{headerTitle}</Text>
+                <Text style={[st.h2, { color: "#4B5563", marginTop: 62 , marginBottom:12}]}>{topMessage}</Text>
 
                 <View style={{ marginVertical: 12 }}>
                     <ProgressRing
-                        size={220}
+                        size={165}
                         stroke={18}
                         percent={percent}
                         color={ringColor}
@@ -114,8 +114,9 @@ export default function ResultScreen() {
 }
 
 const st = StyleSheet.create({
+    title: { textAlign: "center", fontSize: 18, fontWeight: "700", marginTop: 8, marginBottom: 8 },
     wrap: { flex: 1, alignItems: "center" },
-    h1: { fontSize: 20, fontWeight: "800" },
+    h1: { fontSize: 20, fontWeight: "700" },
     h2: { fontSize: 18, fontWeight: "700" },
     stats: {
         width: "100%",
@@ -125,6 +126,6 @@ const st = StyleSheet.create({
         justifyContent: "space-between",
     },
     stat: { alignItems: "center", flex: 1 },
-    statValue: { fontSize: 18, fontWeight: "800" },
+    statValue: { fontSize: 18, fontWeight: "500" },
     statLabel: { marginTop: 4, color: "#6B7280" },
 });
