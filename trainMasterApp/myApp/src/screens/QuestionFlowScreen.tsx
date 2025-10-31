@@ -4,6 +4,7 @@ import QuestionRunner, { Question } from "../components/QuestionRunner/QuestionR
 import { ReviewParams } from "./ReviewAnswersScreen";
 import { AprendizadoStackParamList } from "../components/navigation/RootTabs";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { Cronometro } from "../components/utils/cronometro";
 
 /** ===========================
  * Params aceitos pela tela
@@ -39,7 +40,8 @@ export default function QuestionFlowScreen() {
   const total = QUESTIONS.length;
   const question = QUESTIONS[index];
   const selected = answers[question.id] ?? [];
-
+  const cronometro = new Cronometro();
+  cronometro.iniciar();
   const isFirst = index === 0;
   const isLast = index === total - 1;
 
@@ -50,11 +52,13 @@ export default function QuestionFlowScreen() {
   const onPrev = () => setIndex(i => Math.max(0, i - 1));
   const onNext = () => {
     if (isLast) {
+      cronometro.parar();
       nav.navigate("ReviewAnswers", {
         mode,
         title: title ?? (mode === "exam" ? "Prova" : "Questões"),
         questions: QUESTIONS,
         answers,
+        elapsedSec:cronometro.getSegundos(),
       } satisfies ReviewParams);
       return;
     }

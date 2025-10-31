@@ -98,6 +98,19 @@ export type Exam = {
   courseId: number;
 }
 
+export interface ExamHistoryItem {
+  examId: number;
+  studentId: number;
+  attemptNumber: number;
+  startedAt: string; // ISO date
+  finishedAt: string; // ISO date
+  score: number;
+  durationSeconds: number;
+  status: number; // 1=Aguardando, 2=Em Andamento, 3=Concluído (por exemplo)
+  exam: Exam;
+  id: number;
+}
+
 export interface CourseActivityWithQuestions extends CourseActivity {
   questions: CourseActivityQuestion[];
   exams?: Exam[];

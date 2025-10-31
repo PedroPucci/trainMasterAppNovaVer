@@ -76,10 +76,10 @@ export default function EnrolledCoursesScreen() {
   // ✅ navegação para detalhes ao tocar no card
   const renderItem = React.useCallback(
 
-    
+
     ({ item }: { item: Course }) => (
-      <Pressable onPress={() => nav.navigate("CourseDetail", { course: item})}>
-       <CourseCard item={item} showbutton={true} progress={0} />
+      <Pressable onPress={() => nav.navigate("CourseDetail", { course: item })}>
+        <CourseCard item={item} showbutton={true} progress={0} />
       </Pressable>
     ),
     [nav]

@@ -198,13 +198,13 @@ export default function LoginScreen({ navigation }: any) {
         </TouchableOpacity>
 
         <Text style={s.registerText}>
-          Ainda não tem conta?
+          
           <Text
             style={s.registerLink}
             onPress={() => navigation?.navigate?.("Register")}
           >
             {" "}
-            Registrar
+           Ainda não tem conta? Registrar
           </Text>
         </Text>
       </ScrollView>

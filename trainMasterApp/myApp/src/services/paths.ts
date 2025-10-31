@@ -6,5 +6,6 @@ export const PATHS = {
   coursesSearch: "/courses/GetByName",
   courseEnrolled:"/courses/GetByUserId",
   coursesActivities:"/course-activities",
-  exams:"/exams"
+  exams:"/exams",
+  history:"exam-histories/user"
 } as const;

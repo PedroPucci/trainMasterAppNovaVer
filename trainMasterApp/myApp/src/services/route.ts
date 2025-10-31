@@ -1,7 +1,7 @@
 import { api } from "./api";
 import { authService } from "./auth/auth.service";
 import { PATHS } from "./paths";
-import type { Course, CourseActivity, Exam, LoginPayload, ProfilePayload } from "./types";
+import type { Course, CourseActivity, Exam, ExamHistoryItem, LoginPayload, ProfilePayload } from "./types";
 
 
 
@@ -27,6 +27,12 @@ export const routes = {
     getAll: () => api.get<CourseActivity[]>(`${PATHS.coursesActivities}/all`),
     getAllQuestionsFromCourse: (id: number) => api.get(`${PATHS.coursesActivities}/${id}/questions`),
     getAllExams: () => api.get<Exam[]>(`${PATHS.exams}/all`),
+  },
+  history:{
+    getAllByUserId: () => {
+      const userId = authService.requireUserId().toString();
+      return api.get<ExamHistoryItem[]>(`${PATHS.history}/${userId}`);
+    }
   },
   courses: {
     getAll: () => api.get<Course[]>(PATHS.courses),
