@@ -79,7 +79,7 @@ export default function ResultScreen() {
 
             <View style={[st.wrap, { paddingBottom: Math.max(insets.bottom + 24, 24) }]}>
                 <Text style={[st.title, { color: hardText }]}>{headerTitle}</Text>
-                <Text style={[st.h2, { color: "#4B5563", marginTop: 62 , marginBottom:12}]}>{topMessage}</Text>
+                <Text style={[st.h2, { color: hardText, marginTop: 62 , marginBottom:12}]}>{topMessage}</Text>
 
                 <View style={{ marginVertical: 12 }}>
                     <ProgressRing
@@ -88,12 +88,12 @@ export default function ResultScreen() {
                         percent={percent}
                         color={ringColor}
                         text={percentTxt}
-                        textColor="#1E2352"
+                        textColor={hardText}
                     />
                 </View>
 
                 {!!bigMessage && (
-                    <Text style={[st.h1, { color: "#1E2352", marginTop: 8, textAlign: "center" }]}>
+                    <Text style={[st.h1, { color: hardText, marginTop: 8, textAlign: "center" }]}>
                         {bigMessage}
                     </Text>
                 )}
@@ -101,11 +101,11 @@ export default function ResultScreen() {
                 <View style={st.stats}>
                     <View style={st.stat}>
                         <Text style={[st.statValue, { color: hardText }]}>{`${correct}/${total}`}</Text>
-                        <Text style={st.statLabel}>Resultado</Text>
+                        <Text style={[st.statLabel, { color: hardText }]}>Resultado</Text>
                     </View>
                     <View style={st.stat}>
                         <Text style={[st.statValue, { color: hardText }]}>{fmtTime(elapsedSec)}</Text>
-                        <Text style={st.statLabel}>Tempo</Text>
+                        <Text style={[st.statLabel, { color: hardText }]}>Tempo</Text>
                     </View>
                 </View>
             </View>

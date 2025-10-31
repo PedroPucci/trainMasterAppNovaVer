@@ -20,6 +20,7 @@ import "react-native-reanimated";
 import FaqScreen from "./src/screens/FaqScreen";
 import ExamOverView from "./src/screens/ExamOverView";
 import DepartmentScreen from "./src/screens/Department";
+import ExamHistoryScreen from "./src/screens/ExamHistoryScreen";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -62,6 +63,12 @@ function DrawerNavigator() {
         name="Department"
         component={DepartmentScreen}
         options={{ title: "Departamento" }}>
+      </Drawer.Screen>
+
+      <Drawer.Screen
+        name="History"
+        component={ExamHistoryScreen}
+        options={{ title: "Historico" }}>
       </Drawer.Screen>
     </Drawer.Navigator>
   );

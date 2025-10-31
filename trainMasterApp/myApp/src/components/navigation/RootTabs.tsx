@@ -153,10 +153,10 @@ export default function RootTabs() {
       onPress: () => { setMenuOpen(false); drawerNav.navigate("FaqScreen"); },
     },
     {
-      key: "exam",
-      label: "Provas",
+      key: "history",
+      label: "Historico",
       icon: "reader-outline",
-      onPress: () => { setMenuOpen(false); drawerNav.navigate("ExamOverView"); },
+      onPress: () => { setMenuOpen(false); drawerNav.navigate("History"); },
     },
     {
       key: "departamento",
