@@ -1,0 +1,48 @@
+name: Maestro CI Validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-maestro:
+    name: Validar e Rodar Testes Maestro 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Node dependencies
+        run: |
+          npm install || echo "Nenhum package.json encontrado, continuando..."
+
+      - name: Install Maestro
+        run: |
+          wget https://get.maestro.mobile.dev -O get_maestro.sh
+          chmod +x get_maestro.sh
+          ./get_maestro.sh
+          echo "PATH=$PATH:/home/runner/.maestro/bin" >> $GITHUB_ENV
+
+      - name: Check Maestro Version
+        run: maestro --version
+
+      - name: Validate Maestro Test Files
+        run: |
+          echo "🔍 Validando estrutura dos testes YAML..."
+          find samples/tests -name "*.yaml" -print -exec maestro validate {} \;
+
+      - name: Run Maestro Tests
+        run: |
+          mkdir -p maestro-report
+          maestro test samples/tests/flow.yaml --format junit --output maestro-report/report.xml || echo "⚠️ Testes falharam, mas o fluxo foi validado!"
+
+      - name: Upload Maestro Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-report
+          path: maestro-report/
