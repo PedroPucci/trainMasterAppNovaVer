@@ -4,44 +4,53 @@ on:
   push:
     branches:
       - main
+      - teste_automatizado/mc
   pull_request:
     branches:
       - main
+      - teste_automatizado/mc
 
 jobs:
   validate-maestro:
-    name: Validar e Rodar Testes Maestro 
+    name: Validar e Rodar Testes Maestro
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout código principal (main)
         uses: actions/checkout@v4
+        with:
+          ref: main
 
-      - name: Install Node dependencies
+      - name: Baixar branch de testes (teste_automatizado/mc)
+        run: |
+          git fetch origin teste_automatizado/mc:teste_automatizado/mc
+          git checkout teste_automatizado/mc -- samples/tests
+
+      - name: Instalar dependências Node
         run: |
           npm install || echo "Nenhum package.json encontrado, continuando..."
 
-      - name: Install Maestro
+      - name: Instalar Maestro
         run: |
           wget https://get.maestro.mobile.dev -O get_maestro.sh
           chmod +x get_maestro.sh
           ./get_maestro.sh
           echo "PATH=$PATH:/home/runner/.maestro/bin" >> $GITHUB_ENV
 
-      - name: Check Maestro Version
+      - name: Verificar versão do Maestro
         run: maestro --version
 
-      - name: Validate Maestro Test Files
+      - name: Validar arquivos de teste do Maestro
         run: |
           echo "🔍 Validando estrutura dos testes YAML..."
           find samples/tests -name "*.yaml" -print -exec maestro validate {} \;
 
-      - name: Run Maestro Tests
+      - name: Rodar testes do Maestro
         run: |
           mkdir -p maestro-report
           maestro test samples/tests/flow.yaml --format junit --output maestro-report/report.xml || echo "⚠️ Testes falharam, mas o fluxo foi validado!"
 
-      - name: Upload Maestro Report
+      - name: Upload do Relatório Maestro
         uses: actions/upload-artifact@v4
         with:
           name: maestro-report
