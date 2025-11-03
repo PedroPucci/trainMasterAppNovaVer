@@ -61,26 +61,42 @@ Contém os endpoints para acesso e execução das funcionalidades:
 
 TrainMaster App – Integração Contínua e Testes Automatizados
 
-Este repositório utiliza um fluxo de CI/CD integrado entre GitHub e GitLab para garantir qualidade e confiabilidade no desenvolvimento.
+Este repositório utiliza um fluxo de Integração Contínua (CI) totalmente automatizado via GitHub Actions, garantindo qualidade, rastreabilidade e validação contínua do código.
 
-🔄 Fluxo de Integração Contínua
+🔄 Fluxo de Integração Contínua (CI)
 
-Cada push realizado na branch main do GitHub dispara automaticamente um webhook configurado no GitLab.
+Cada push realizado nas branches main ou teste_automatizado/mc dispara automaticamente o workflow de validação.
 
-O GitLab CI/CD executa a pipeline de testes automatizados, sem necessidade de gerar manualmente artefatos locais.
+O GitHub Actions executa a pipeline configurada no arquivo .github/workflows/main.yml.
 
-Os testes são executados com o Maestro, garantindo a validação da aplicação em ambiente simulado.
+A pipeline valida os arquivos YAML do Maestro, garantindo que todos os testes estejam corretos e bem estruturados.
+
+Caso exista um fluxo configurado com um APK no futuro, o Maestro executará os testes automatizados e gerará relatórios de resultado.
+
+🧪 Testes Automatizados com Maestro
+
+Os testes estão definidos na pasta samples/tests.
+
+Cada arquivo .yaml descreve um fluxo de teste para o Maestro, simulando a interação do usuário com o aplicativo.
+
+Mesmo sem um APK, os testes são validados sintaticamente, assegurando que a automação está pronta para execução futura.
 
 📊 Relatórios
 
-Após a execução, relatórios são salvos automaticamente, permitindo análise detalhada da saúde do projeto.
+Quando houver um APK configurado e testes executados, relatórios no formato JUnit/XML serão salvos automaticamente em:
 
-Falhas em testes interrompem a pipeline e alertam a equipe de desenvolvimento.
+maestro-report/report.xml
+
+Esses relatórios poderão ser baixados diretamente nos artefatos do workflow no GitHub Actions.
+
+Atualmente, se não houver execução de testes (sem APK), o workflow valida os arquivos e completa com sucesso sem gerar relatórios.
 
 🚀 Benefícios
 
-Automação completa desde o push até a validação da aplicação.
+Automação completa: validação automática dos testes a cada alteração nas branches principais.
 
-Feedback rápido, evitando que falhas cheguem à produção.
+Feedback rápido: qualquer erro na estrutura dos testes YAML é identificado antes de afetar o projeto.
 
-Escalabilidade, permitindo que múltiplos testes rodem em paralelo.
+Integração escalável: o fluxo é facilmente expandido para incluir execução real de testes e publicação de resultados.
+
+Sem dependência de ferramentas externas: todo o processo roda dentro do próprio GitHub.
