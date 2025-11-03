@@ -1,0 +1,10 @@
+appId: com.lanapraca.myApp
+---
+- tapOn: Buscar
+- tapOn: "Pesquisar cursos"
+- inputText: "java"
+- "eraseText"
+- tapOn: "Pesquisar cursos"
+- inputText: "C#"
+- "eraseText"
+

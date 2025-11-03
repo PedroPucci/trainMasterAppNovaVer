@@ -1,0 +1,6 @@
+appId: com.lanapraca.myApp
+---
+- tapOn: "Menu"
+- tapOn: "Departamento"
+- tapOn:
+    id: "android:id/button1"

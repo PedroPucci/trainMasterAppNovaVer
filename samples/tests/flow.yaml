@@ -1,0 +1,13 @@
+appId: com.lanapraca.myApp
+---
+
+- include: RegistrarTM.yaml
+- include: LoginTM.yaml
+- include: BuscarTM.yaml
+- include: Realizar matricula.yaml
+- include: AprendizadoTM.yaml
+- include: PerfilTM.yaml
+- include: DepartamentoTM.yaml
+
+
+

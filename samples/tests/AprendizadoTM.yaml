@@ -1,0 +1,4 @@
+appId: com.lanapraca.myApp
+---
+- tapOn: "Aprendizado"
+- tapOn: "Curso de Desenvolvimento .NET"
