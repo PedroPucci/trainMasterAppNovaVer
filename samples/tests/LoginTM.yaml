@@ -1,0 +1,8 @@
+appId: com.lanapraca.myApp
+---
+- tapOn: "CPF"
+- inputText: "97799623799"
+- tapOn: "Senha"
+- inputText: "CASA20"
+- tapOn: "Entrar"
+- tapOn: OK

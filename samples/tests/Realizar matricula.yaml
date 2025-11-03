@@ -1,0 +1,6 @@
+appId: com.lanapraca.myApp
+---
+- tapOn: "Buscar"
+- tapOn: "Curso de Desenvolvimento .NET"
+- tapOn: "Matricular-se"
+- tapOn: "Ir para meus cursos"

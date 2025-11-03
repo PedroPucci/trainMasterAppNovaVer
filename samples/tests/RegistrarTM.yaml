@@ -1,0 +1,16 @@
+appId: com.lanapraca.myApp
+---
+- tapOn: "Ainda não tem conta? Registrar"
+- tapOn: "Digite o CPF"
+- inputText: "54941286014"
+- tapOn: "Digite o nome completo"
+- inputText: "Suzana Lima"
+- tapOn: "Digite o e-mail"
+- inputText: "sabadoteste@gmail.com"
+- tapOn: "Digite a senha"
+- inputText: "CASA10"
+- tapOn: "Confirme a senha"
+- inputText: "CASA10"
+- tapOn: "Registrar"
+- tapOn:
+    id: "android:id/button1"

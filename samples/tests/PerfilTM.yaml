@@ -1,0 +1,30 @@
+appId: com.lanapraca.myApp
+---
+- tapOn: ", Perfil"
+- tapOn: "Nome completo"
+- "eraseText"
+- tapOn: "E-mail"
+- "eraseText"
+- tapOn: "Data de nascimento (dd/mm/aaaa)"
+- "eraseText"
+- tapOn: "CPF"
+- "eraseText"
+- tapOn: "Nome completo"
+- inputText: "MC"
+- tapOn: "E-mail"
+- inputText: "testesuzana@gmail.com"
+- tapOn: "Data de nascimento (dd/mm/aaaa)"
+- inputText: "14/10/1999"
+- tapOn: "CPF"
+- inputText: "97799623799"
+- tapOn:
+    text: ""
+    index: 0
+- tapOn: "Solteiro"
+- tapOn:
+    text: ""
+    index: 1
+- tapOn: "Feminino"
+- tapOn: "Atualizar"
+- tapOn:
+    id: "android:id/button1"
