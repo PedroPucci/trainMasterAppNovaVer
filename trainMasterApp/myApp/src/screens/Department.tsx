@@ -7,10 +7,10 @@ import { styles as s } from "./styles";
 import { BASE_URL, fetchComTimeout } from "../components/routes/apiConfig";
 import { Alert, ActivityIndicator } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { profileService } from "../services/profile/profile.service";
+import { authService } from "../services/auth/auth.service";
 
 
-
-const USER_ID = 1; 
 
 type DepartmentProps = {
   department: string;
@@ -29,10 +29,11 @@ export default function DepartmentScreen() {
   const [departmentInfo, setDepartmentInfo] = React.useState<DepartmentProps | null>(null);
   const [loading, setLoading] = React.useState(true);
   const Tab = createBottomTabNavigator();
+  const userId = authService.getUserId();
 
   async function loadDepartment() {
     try {
-      const url = `${BASE_URL}/api/departments/by-user/${USER_ID}`;
+      const url = `${BASE_URL}/api/departments/by-user/${userId}`;
       const res = await fetchComTimeout(url, {
         method: "GET",
         headers: { Accept: "application/json" },
