@@ -7,5 +7,6 @@ export const PATHS = {
   courseEnrolled:"/courses/GetByUserId",
   coursesActivities:"/course-activities",
   exams:"/exams",
-  history:"exam-histories/user"
+  history:"exam-histories/user",
+  faq:"/faqs",
 } as const;

@@ -65,6 +65,12 @@ export type CourseDetail = {
   totalModules: number;
 };
 
+export type faq = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
 export type CourseActivity = {
   id: number;
   title: string;

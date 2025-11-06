@@ -69,11 +69,11 @@ export default function CourseDetailScreen() {
   // função que realmente busca
   const fetchEnrolled = React.useCallback(
     async () => {
-      //if (!course2?.id) return;
+      if (!course2?.id) return;
       setError(null);
       setLoading(true);
       try {
-        const items = await CoursesActivityService.getAllFilterById(1);
+        const items = await CoursesActivityService.getAllFilterById(+course2.id);
         setDataQuestion(items);
       } catch (e: any) {
         if (
