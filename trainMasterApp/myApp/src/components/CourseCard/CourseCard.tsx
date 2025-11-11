@@ -13,7 +13,7 @@ export default function CourseCard({ item, showbutton, progress }: Props) {
     month: "long",
     year: "numeric"
   });
-  
+
   const formatCourseProgress = (progress?: number | null): string | null => {
     // Se o valor for null, undefined ou não for número
     if (progress === null || progress === undefined || isNaN(progress)) {
@@ -33,7 +33,7 @@ export default function CourseCard({ item, showbutton, progress }: Props) {
 
     return `${safeProgress}%`;
   }
-  
+
   const { theme } = useAppTheme();
   console.log("CourseCard - item:", item);
   const navigation = useNavigation<any>();
@@ -45,9 +45,15 @@ export default function CourseCard({ item, showbutton, progress }: Props) {
   const progressTxt = formatCourseProgress(showbutton ? progress : null);
 
   function handlePress() {
-    if (!showbutton)    navigation.navigate("Aprendizado", { screen:  "CourseOverview", params: { courseId: item.id } });
-    else navigation.navigate("CourseDetail", { course: item})
+    if (!showbutton) navigation.navigate("Aprendizado", { screen: "CourseOverview", params: { courseId: item.id } });
+    else navigation.navigate("CourseDetail", { course: item })
   }
+
+  function handlePressDetail(mode: string) {
+    if (mode == "left") navigation.navigate("CourseDetail", { course: item })
+    else navigation.navigate("CourseDetail", { course: item })
+  }
+
 
   return (
     <Pressable style={[s.card, { backgroundColor: hardBg }]} onPress={handlePress}>
@@ -75,9 +81,25 @@ export default function CourseCard({ item, showbutton, progress }: Props) {
           </Text>
         </View>
       </View>
-        {showbutton? (
-      <Text style={[s.progress, { color: hardText }]}>{progressTxt}</Text>
-         ) : null}
+      {showbutton ? (<>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          <Pressable
+            onPress={()=>handlePressDetail("left")}
+            style={{ flex: 1, paddingVertical: 10 }}
+          >
+            <Text style={[s.progress, { color: hardText, textAlign: 'left' }]}>{progressTxt}</Text>
+          </Pressable>
+
+          <Pressable
+             onPress={()=>handlePressDetail("right")}
+            style={{ flex: 1, paddingVertical: 10 }}
+          >
+            <Text style={[s.progress, { color: hardText, textAlign: 'right' }]}>Ver atividades</Text>
+          </Pressable>
+        </View>
+      </>
+      ) : null
+      }
     </Pressable>
   );
 }
