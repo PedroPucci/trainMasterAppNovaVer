@@ -27,6 +27,8 @@ import { Course } from "../../services";
 import { CourseOverviewParams } from "../../screens/CourseOverviewScreen";
 import CourseOverviewScreen from "../../screens/CourseOverviewScreen";  // import para tela de visão do curso
 import ResultScreen, { ResultParams } from "../../screens/ResultScreen";
+import CourseContentScreen from "../../screens/CourseContent";
+
 
 
 // 1) Tipos das rotas da Tab (nomes das abas)
@@ -52,6 +54,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 export type AprendizadoStackParamList = {
   AprendizadoHome: undefined;          // lista de cursos matriculados
   CourseDetail: { course: Course };        // detalhe do curso (não aparece na Tab)
+  CourseContent: { course: Course };  
   CourseOverview: CourseOverviewParams;
   QuestionFlow: QuestionFlowParams;
   ReviewAnswers: ReviewParams;
@@ -70,6 +73,10 @@ function AprendizadoStack() {
       <AprendizadoStackNav.Screen
         name="CourseDetail"
         component={CourseDetailScreen}
+      />
+      <AprendizadoStackNav.Screen
+        name="CourseContent"
+        component={CourseContentScreen}
       />
       <AprendizadoStackNav.Screen
         name="CourseOverview"

@@ -46,11 +46,11 @@ export default function CourseCard({ item, showbutton, progress }: Props) {
 
   function handlePress() {
     if (!showbutton) navigation.navigate("Aprendizado", { screen: "CourseOverview", params: { courseId: item.id } });
-    else navigation.navigate("CourseDetail", { course: item })
+    else navigation.navigate("CourseContent", { course: item })
   }
 
   function handlePressDetail(mode: string) {
-    if (mode == "left") navigation.navigate("CourseDetail", { course: item })
+    if (mode == "left") navigation.navigate("CourseContent", { course: item })
     else navigation.navigate("CourseDetail", { course: item })
   }
 

@@ -10,50 +10,12 @@ import { goToExamFlow, goToExerciseFlow } from "../components/utils/questionsHel
 import { CoursesActivityService } from "../services/courseActivities/courseActivities";
 import { AprendizadoStackParamList } from "../components/navigation/RootTabs";
 
-// MOCK rápido (pode vir do seu service depois)
-const MOCK: CourseDetail = {
-  id: "1",
-  title: "Fundamentos da Web",
-  exam: {
-    id: "exam-m1",
-    title: "Módulo 1 – Introdução",
-    lessons: [
-      { id: "ex-1", title: "Prova 1", completed: true },
-      { id: "ex-2", title: "Prova 2" },
-    ],
-  },
-  exercises: [
-    {
-      id: "m1",
-      title: "Módulo 1 – Introdução",
-      lessons: [
-        { id: "a1", title: "Aula 1: O que é Web?", completed: true },
-        { id: "a2", title: "Aula 2: Cliente e Servidor", progressPercentage: 30 },
-      ],
-    },
-    {
-      id: "m2",
-      title: "Módulo 2 – HTML Básico",
-      lessons: [
-        { id: "a3", title: "Aula 3: Estrutura HTML" },
-        { id: "a4", title: "Aula 4: Tags principais" },
-      ],
-    },
-    {
-      id: "m3",
-      title: "Módulo 3 – Exercícios práticos",
-      lessons: [{ id: "q1", title: "Quiz 1: HTML Básico" }],
-    },
-  ],
-  completedModules: 3,
-  totalModules: 5,
-};
 
 type CourseDetailRouteProp = RouteProp<AprendizadoStackParamList, "CourseDetail">;
 
 export default function CourseDetailScreen() {
   const nav = useNavigation();
-  const course = MOCK;
+  const course = [];
   const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
   const isDark = theme.name === "dark";
@@ -65,7 +27,7 @@ export default function CourseDetailScreen() {
   const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
+  const [modules, SetModules] = React.useState(0);
   // função que realmente busca
   const fetchEnrolled = React.useCallback(
     async () => {
@@ -75,6 +37,11 @@ export default function CourseDetailScreen() {
       try {
         const items = await CoursesActivityService.getAllFilterById(+course2.id);
         setDataQuestion(items);
+        const modulesWithQuestions =
+          (items?.activities || []).filter(
+            m => m.questions && m.questions.length > 0
+          );
+        SetModules(modulesWithQuestions.length)
       } catch (e: any) {
         if (
           e?.name !== "CanceledError" &&
@@ -91,7 +58,7 @@ export default function CourseDetailScreen() {
   );
 
   React.useEffect(() => {
-     
+
     const controller = new AbortController();
     fetchEnrolled();
     return () => controller.abort();
@@ -109,42 +76,68 @@ export default function CourseDetailScreen() {
         <Text style={[s.sectionTitle, { color: hardText }]}>Prova</Text>
         <View style={[s.card, { backgroundColor: hardBg }]}>
           <View style={s.rowTop}>
-            <Text style={[s.cardTitle, { color: hardText }]}>{dataQuestion?.exams[0].title}</Text>
+            <Text style={[s.cardTitle, { color: hardText }]}>
+              {dataQuestion?.exams[0].title}
+            </Text>
 
-            <Pressable style={s.cta} onPress={() => goToExamFlow(nav.navigate, "Prova",dataQuestion?.activities[0].questions||[])}>
+            <Pressable
+              style={s.cta}
+              onPress={() =>
+                goToExamFlow(
+                  nav.navigate,
+                  "Prova",
+                  dataQuestion?.activities[0].questions || []
+                )
+              }
+            >
               <Text style={s.ctaText}>Entrar</Text>
             </Pressable>
           </View>
-
-
-          {/* {course.exam.lessons.map((l) => (
-            <Row key={l.id} lesson={l} />
-          ))} */}
-
         </View>
 
         {/* Exercícios */}
-        <Text style={[s.sectionTitle, { marginTop: 16, color: hardText }]}>Exercícios</Text>
+        <Text style={[s.sectionTitle, { marginTop: 16, color: hardText }]}>
+          Exercícios
+        </Text>
         <Text style={[s.subtitle, { color: hardText }]}>
-          0 de {dataQuestion?.activities.length} módulos concluídos
+          0 de {modules} módulos concluídos
         </Text>
 
-        {dataQuestion?.activities.map((m, idx) => (
-          <View key={m.id} style={[s.card, { backgroundColor: hardBg }, idx > 0 && s.cardSeparated]}>
-            <View style={s.rowTop}>
-              <Text style={[s.cardTitle, { color: hardText }]}>{m.title}</Text>
-              <Pressable style={s.cta} onPress={() => goToExerciseFlow(nav.navigate, m.questions)}>
-                <Text style={s.ctaText}>Entrar</Text>
-              </Pressable>
-            </View>
-            {/* {m.questions.map((l) => (
+        {dataQuestion?.activities
+          ?.filter(m => m.questions && m.questions.length > 0) // só com questions
+          .map((m, idx) => (
+            <View
+              key={m.id}
+              style={[
+                s.card,
+                { backgroundColor: hardBg },
+                idx > 0 && s.cardSeparated,
+              ]}
+            >
+              <View style={s.rowTop}>
+                <Text style={[s.cardTitle, { color: hardText }]}>
+                  {m.title}
+                </Text>
+
+                <Pressable
+                  style={s.cta}
+                  onPress={() => goToExerciseFlow(nav.navigate, m.questions)}
+                >
+                  <Text style={s.ctaText}>Entrar</Text>
+                </Pressable>
+              </View>
+
+              {/* se quiser listar as questões: 
+            {m.questions.map(l => (
               <Row key={l.id} lesson={l} />
-            ))} */}
-          </View>
-        ))}
+            ))} 
+            */}
+            </View>
+          ))}
       </ScrollView>
     </View>
   );
+
 }
 
 function Row({ lesson }: { lesson: Lesson }) {

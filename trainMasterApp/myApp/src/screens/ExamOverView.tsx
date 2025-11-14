@@ -32,34 +32,6 @@ type DrawerParamList = {
   FaqScreen: undefined;
 };
 
-const EXAM_LIST: { title: string; items: ExamItem[] } = {
-  title: "Módulo 1 – Introdução",
-  items: [
-    { label: "Prova 1", done: true },
-    { label: "Prova 2" },
-  ],
-};
-
-const MODULES: Module[] = [
-  {
-    title: "Módulo 1 – Introdução",
-    items: [
-      { label: "Aula 1: O que é Web?", done: true },
-      { label: "Aula 2: Cliente e Servidor", note: "30%" },
-    ],
-  },
-  {
-    title: "Módulo 2 – HTML Básico",
-    items: [
-      { label: "Aula 3: Estrutura HTML" },
-      { label: "Aula 4: Tags principais" },
-    ],
-  },
-  {
-    title: "Módulo 3 – Exercícios práticos",
-    items: [{ label: "Quiz 1: HTML Básico" }],
-  },
-];
 
 export default function ExamOverView() {
   const { theme } = useAppTheme();
