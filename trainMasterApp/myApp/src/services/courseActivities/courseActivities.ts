@@ -25,7 +25,7 @@ export const CoursesActivityService = {
             // 4) Cria atividades com suas questões (ordena por order)
             const activitiesWithQuestions: CourseActivityWithQuestions[] = activities.map((act) => ({
                 ...act,
-                questions: (byActivity.get(1) ?? []).sort((a, b) => a.order - b.order), // 👈 fixa em 1
+                questions: (byActivity.get(act.id) ?? []).sort((a, b) => a.order - b.order), // 👈 fixa em 1
             }));
 
             // 5) Busca provas do curso (mantém normal)
