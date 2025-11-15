@@ -1,22 +1,12 @@
 import * as React from "react";
 import { View, Text, ScrollView } from "react-native";
 import AppHeader from "../components/header/AppHeader";
-import FooterMenu from "../components/footer/FooterMenu";
 import { useAppTheme } from "../components/theme/ThemeProvider";
 import { styles as s } from "./styles";
-import { BASE_URL, fetchComTimeout } from "../components/routes/apiConfig";
 import { Alert, ActivityIndicator } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { profileService } from "../services/profile/profile.service";
-import { authService } from "../services/auth/auth.service";
 
-
-
-type DepartmentProps = {
-  department: string;
-  team: string;
-  manager: string;
-};
+import { DepartamentService } from "../services/departament/departament.service";
+import { DepartmentProps } from "../services";
 
 export default function DepartmentScreen() {
   const { theme } = useAppTheme();
@@ -28,36 +18,15 @@ export default function DepartmentScreen() {
 
   const [departmentInfo, setDepartmentInfo] = React.useState<DepartmentProps | null>(null);
   const [loading, setLoading] = React.useState(true);
-  const Tab = createBottomTabNavigator();
-  const userId = authService.getUserId();
 
   async function loadDepartment() {
     try {
-      const url = `${BASE_URL}/api/departments/by-user/${userId}`;
-      const res = await fetchComTimeout(url, {
-        method: "GET",
-        headers: { Accept: "application/json" },
-      });
+      const res = await DepartamentService.getByUserId();
 
-      const raw = await res.text();
-      let data: any = null;
-      try {
-        data = JSON.parse(raw);
-      } catch {}
-
-      if (!res.ok) {
-        const msg = data?.message || raw || `HTTP ${res.status}`;
-        Alert.alert("Erro", msg);
-        return;
-      }
-
-      const info: DepartmentProps = {
-        department: data.departmentName ?? "Não informado",
-        team: data.teamName ?? "Não informado",
-        manager: data.managerName ?? "Não informado",
-      };
-      setDepartmentInfo(info);
+      console.log(res)
+      setDepartmentInfo(res[0]);
     } catch (e: any) {
+      if(e.status =404) return  Alert.alert("Erro", "Usuario nao possui departamento cadastrado ");
       const msg =
         e?.message === "Tempo limite excedido"
           ? "Conexão lenta/instável. Tente novamente."

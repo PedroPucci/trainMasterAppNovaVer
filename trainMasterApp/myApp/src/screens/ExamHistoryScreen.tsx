@@ -22,6 +22,7 @@ export default function ExamHistoryScreen() {
         setItens(itens);
       } catch (error) {
         console.error("Erro ao carregar dados:", error);
+        setItens([])
       } finally {
         setLoading(false);
       }
@@ -43,14 +44,17 @@ export default function ExamHistoryScreen() {
     <View style={{ flex: 1, backgroundColor: hardBg }}>
       <AppHeader userName="Lydia" onLogout={() => { }} />
 
-      <Text style={[styles.title, {color: hardText}]}>Histórico de provas</Text>
+      <Text style={[styles.title, { color: hardText }]}>Histórico de provas</Text>
 
       {loading ? (
         <View style={styles.loader}>
           <ActivityIndicator size="large" />
         </View>
-      ) : (<>
-        <Text style={[styles.course, {color: hardText}]}>Curso: {historyItens[0].exam.title}</Text>
+      ) : (<>{historyItens[0]?.exam?.title ? (
+        <Text style={[styles.course, { color: hardText }]}>Curso: {historyItens[0]?.exam?.title}</Text>
+      ) : null
+      }
+
         <FlatList
           data={historyItens}
           keyExtractor={(i) => i.id.toString()}

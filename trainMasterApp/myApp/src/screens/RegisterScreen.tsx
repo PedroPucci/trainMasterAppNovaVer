@@ -109,6 +109,9 @@ export default function RegisterScreen({ navigation }: any) {
             : raw || `HTTP ${res.status}`);
         Alert.alert("Erro", msg);
         return;
+      } else if(!data.success) {
+         Alert.alert("Erro", data.message);
+         return;
       }
 
       Alert.alert("Sucesso", "Conta criada com sucesso!");
