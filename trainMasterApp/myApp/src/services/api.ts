@@ -72,7 +72,7 @@ export const baseURL = (() => {
     return url;
   }
 
-  const url = ENV_PROD ?? "https://seu-dominio.com/api";
+  const url = ENV_PROD;
   const reason = ENV_PROD
     ? "usando EXPO_PUBLIC_API_URL (produção configurada)"
     : "variável PROD ausente → fallback para domínio padrão";

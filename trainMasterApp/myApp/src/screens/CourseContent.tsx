@@ -103,7 +103,7 @@ export default function CourseContentScreen() {
                 {/* Exercícios */}
                 <Text style={[s.sectionTitle, { marginTop: 16, color: hardText }]}></Text>
                 <Text style={[s.subtitle, { color: hardText }]}>
-                    0 de {dataQuestion?.activities.length} módulos concluídos
+                    0 de {dataQuestion?.activities.length || 0} módulos concluídos
                 </Text>
 
                 {dataQuestion?.activities.map((m, idx) => (

@@ -1,3 +1,4 @@
+import DepartmentScreen from "../screens/Department";
 import { api } from "./api";
 import { authService } from "./auth/auth.service";
 import { PATHS } from "./paths";
@@ -6,6 +7,12 @@ import type { Course, CourseActivity, Exam, ExamHistoryItem, faq, LoginPayload, 
 
 
 export const routes = {
+  department: {
+    getByUserId: () => {
+      const userId = authService.requireUserId().toString();
+      return api.get(`${PATHS.departament}/${userId}`)
+    }
+  },
   profile: {
     add: (payload: ProfilePayload) =>
       api.post(`${PATHS.profile}/adicionarPerfil`, payload),

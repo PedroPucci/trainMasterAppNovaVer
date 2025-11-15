@@ -125,3 +125,10 @@ export interface ActivitiesAndExams {
   activities: CourseActivityWithQuestions[];
   exams: Exam[];
 }
+
+
+export type DepartmentProps = {
+  department: string;
+  team: string;
+  manager: string;
+};

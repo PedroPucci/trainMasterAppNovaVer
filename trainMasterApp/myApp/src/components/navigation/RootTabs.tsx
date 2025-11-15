@@ -28,15 +28,18 @@ import { CourseOverviewParams } from "../../screens/CourseOverviewScreen";
 import CourseOverviewScreen from "../../screens/CourseOverviewScreen";  // import para tela de visão do curso
 import ResultScreen, { ResultParams } from "../../screens/ResultScreen";
 import CourseContentScreen from "../../screens/CourseContent";
+import DepartmentScreen from "../../screens/Department";
+import FaqScreen from "../../screens/FaqScreen";
+import ExamHistoryScreen from "../../screens/ExamHistoryScreen";
 
 
 
 // 1) Tipos das rotas da Tab (nomes das abas)
 export type TabParamList = {
-  Inicio: undefined;
+  Inicio: NavigatorScreenParams<InicioStackParamList>;
   Perfil: undefined;
-  Aprendizado: undefined;
-  Buscar: undefined;
+  Aprendizado: NavigatorScreenParams<AprendizadoStackParamList>;
+  Buscar: NavigatorScreenParams<BuscarStackParamList>;
   Menu: undefined;
 };
 
@@ -54,7 +57,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 export type AprendizadoStackParamList = {
   AprendizadoHome: undefined;          // lista de cursos matriculados
   CourseDetail: { course: Course };        // detalhe do curso (não aparece na Tab)
-  CourseContent: { course: Course };  
+  CourseContent: { course: Course };
   CourseOverview: CourseOverviewParams;
   QuestionFlow: QuestionFlowParams;
   ReviewAnswers: ReviewParams;
@@ -90,7 +93,7 @@ function AprendizadoStack() {
         name="ReviewAnswers"
         component={ReviewAnswersScreen}
       />
-        <AprendizadoStackNav.Screen
+      <AprendizadoStackNav.Screen
         name="Result"
         component={ResultScreen}
       />
@@ -118,6 +121,40 @@ function BuscarStack() {
 }
 
 
+// 3.3)  Stack da aba Inicio
+export type InicioStackParamList = {
+  InicioHome: undefined;
+  Department: undefined;
+  Faq: undefined;
+  History: undefined;
+};
+
+
+const InicioStackNav = createNativeStackNavigator<InicioStackParamList>();
+
+function InicioStack() {
+  return (
+    <InicioStackNav.Navigator screenOptions={{ headerShown: false }}>
+      <InicioStackNav.Screen
+        name="InicioHome"
+        component={HomeScreen}
+      />
+      <InicioStackNav.Screen
+        name="Department"
+        component={DepartmentScreen}
+      />
+       <InicioStackNav.Screen
+        name="Faq"
+        component={FaqScreen}
+      />
+       <InicioStackNav.Screen
+        name="History"
+        component={ExamHistoryScreen}
+      />
+    </InicioStackNav.Navigator>
+  );
+}
+
 // 4) Telinha vazia para a aba "Menu" (a aba abre um modal com opções)
 function MenuScreen() {
   return (
@@ -143,7 +180,7 @@ export default function RootTabs() {
   // 7) Helper: navegar para uma aba específica
   const goTab = (tab: keyof TabParamList) => () => {
     setMenuOpen(false);
-    drawerNav.navigate("HomeTabs", { screen: tab }); // HomeTabs = Tab dentro do Drawer
+  drawerNav.navigate("HomeTabs", { screen: tab } as NavigatorScreenParams<TabParamList>); // HomeTabs = Tab dentro do Drawer
   };
 
 
@@ -157,19 +194,37 @@ export default function RootTabs() {
       key: "faq",
       label: "Perguntas frequentes",
       icon: "help-circle-outline",
-      onPress: () => { setMenuOpen(false); drawerNav.navigate("FaqScreen"); },
+     onPress: () => {
+        setMenuOpen(false);
+        drawerNav.navigate("HomeTabs", {
+          screen: "Inicio",         // aba
+          params: { screen: "Faq" }, // screen dentro do stack da aba
+        });
+      },
     },
     {
       key: "history",
       label: "Historico",
       icon: "reader-outline",
-      onPress: () => { setMenuOpen(false); drawerNav.navigate("History"); },
+      onPress: () => {
+        setMenuOpen(false);
+        drawerNav.navigate("HomeTabs", {
+          screen: "Inicio",         // aba
+          params: { screen: "History" }, // screen dentro do stack da aba
+        });
+      },
     },
     {
       key: "departamento",
       label: "Departamento",
       icon: "business-outline",
-      onPress: () => { setMenuOpen(false); drawerNav.navigate("Department"); },
+      onPress: () => {
+        setMenuOpen(false);
+        drawerNav.navigate("HomeTabs", {
+          screen: "Inicio",         // aba
+          params: { screen: "Department" }, // screen dentro do stack da aba
+        });
+      },
     },
   ];
 
@@ -182,7 +237,7 @@ export default function RootTabs() {
         screenOptions={{ headerShown: false }}
         tabBar={(props) => <FooterMenu {...props} />} // usa o seu footer customizado
       >
-        <Tab.Screen name="Inicio" component={HomeScreen} />
+        <Tab.Screen name="Inicio" component={InicioStack} />
         <Tab.Screen name="Perfil" component={ProfileScreen} />
         {/* 👇 Usa o stack no lugar da tela direta */}
 

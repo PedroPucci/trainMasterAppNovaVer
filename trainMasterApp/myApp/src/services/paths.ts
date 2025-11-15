@@ -9,4 +9,5 @@ export const PATHS = {
   exams:"/exams",
   history:"exam-histories/user",
   faq:"/faqs",
+  departament:"/departments/by-user",
 } as const;

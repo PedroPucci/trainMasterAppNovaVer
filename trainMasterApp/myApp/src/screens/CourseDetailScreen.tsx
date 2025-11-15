@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Pressable, ActivityIndicator } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AppHeader from "../components/header/AppHeader";
 import type { CourseDetail, ModuleBlock, Lesson, CourseActivity, CourseActivityWithQuestions, ActivitiesAndExams } from "../services";
@@ -21,13 +21,14 @@ export default function CourseDetailScreen() {
   const isDark = theme.name === "dark";
   const hardBg = isDark ? "#000000" : "#FFFFFF";
   const hardText = isDark ? "#FFFFFF" : "#000000";
+    const hardMuted = isDark ? "#A3A3A3" : "#666666";
   const route = useRoute<CourseDetailRouteProp>();
   const course2 = route.params.course;
   const [dataQuestion, setDataQuestion] = React.useState<ActivitiesAndExams>();
+  const [modulesWithQuestions, SetModulesWithQuestions] = React.useState<CourseActivityWithQuestions[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [refreshing, setRefreshing] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [modules, SetModules] = React.useState(0);
+
   // função que realmente busca
   const fetchEnrolled = React.useCallback(
     async () => {
@@ -35,13 +36,13 @@ export default function CourseDetailScreen() {
       setError(null);
       setLoading(true);
       try {
-        const items = await CoursesActivityService.getAllFilterById(+course2.id);
+        const items = await CoursesActivityService.getAllFilterById(+course2?.id);
         setDataQuestion(items);
-        const modulesWithQuestions =
+        const _modulesWithQuestions =
           (items?.activities || []).filter(
             m => m.questions && m.questions.length > 0
           );
-        SetModules(modulesWithQuestions.length)
+        SetModulesWithQuestions(_modulesWithQuestions)
       } catch (e: any) {
         if (
           e?.name !== "CanceledError" &&
@@ -68,73 +69,97 @@ export default function CourseDetailScreen() {
     <View style={{ flex: 1, backgroundColor: hardBg }}>
       <AppHeader userName="Lydia" onLogout={() => { }} />
 
-      <ScrollView contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 110, 120) }}>
-        {/* Título */}
-        <Text style={[s.title, { color: hardText }]}>{course2.name}</Text>
 
-        {/* Prova */}
-        <Text style={[s.sectionTitle, { color: hardText }]}>Prova</Text>
-        <View style={[s.card, { backgroundColor: hardBg }]}>
-          <View style={s.rowTop}>
-            <Text style={[s.cardTitle, { color: hardText }]}>
-              {dataQuestion?.exams[0].title}
-            </Text>
-
-            <Pressable
-              style={s.cta}
-              onPress={() =>
-                goToExamFlow(
-                  nav.navigate,
-                  "Prova",
-                  dataQuestion?.activities[0].questions || []
-                )
-              }
-            >
-              <Text style={s.ctaText}>Entrar</Text>
-            </Pressable>
-          </View>
+      {loading ? (
+        <View style={{ marginTop: 32 }}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
+      ) : dataQuestion?.activities.length || dataQuestion?.exams.length ? (
+        <ScrollView contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 110, 120) }}>
 
-        {/* Exercícios */}
-        <Text style={[s.sectionTitle, { marginTop: 16, color: hardText }]}>
-          Exercícios
-        </Text>
-        <Text style={[s.subtitle, { color: hardText }]}>
-          0 de {modules} módulos concluídos
-        </Text>
 
-        {dataQuestion?.activities
-          ?.filter(m => m.questions && m.questions.length > 0) // só com questions
-          .map((m, idx) => (
-            <View
-              key={m.id}
-              style={[
-                s.card,
-                { backgroundColor: hardBg },
-                idx > 0 && s.cardSeparated,
-              ]}
-            >
-              <View style={s.rowTop}>
-                <Text style={[s.cardTitle, { color: hardText }]}>
-                  {m.title}
-                </Text>
+          {/* Título */}
+          <Text style={[s.title, { color: hardText }]}>{course2.name}</Text>
 
-                <Pressable
-                  style={s.cta}
-                  onPress={() => goToExerciseFlow(nav.navigate, m.questions)}
-                >
-                  <Text style={s.ctaText}>Entrar</Text>
-                </Pressable>
-              </View>
+          {/* Prova */}
+          { dataQuestion?.exams.length ? (          
+            <>
+            <Text style={[s.sectionTitle, { color: hardText }]}>Prova</Text>
+          <View style={[s.card, { backgroundColor: hardBg }]}>
+            <View style={s.rowTop}>
+              <Text style={[s.cardTitle, { color: hardText }]}>
+                {dataQuestion?.exams[0].title}
+              </Text>
 
-              {/* se quiser listar as questões: 
+              <Pressable
+                style={s.cta}
+                onPress={() =>
+                  goToExamFlow(
+                    nav.navigate,
+                    "Prova",
+                    modulesWithQuestions[0].questions || []
+                  )
+                }
+              >
+                <Text style={s.ctaText}>Entrar</Text>
+              </Pressable>
+            </View>
+          </View>
+          </>)
+          :null}
+
+
+          {/* Exercícios */}
+                    { dataQuestion?.activities.length ? (          
+            <>
+          <Text style={[s.sectionTitle, { marginTop: 16, color: hardText }]}>
+            Exercícios
+          </Text>
+          <Text style={[s.subtitle, { color: hardText }]}>
+            0 de {modulesWithQuestions?.length} módulos concluídos
+          </Text>
+
+          {dataQuestion?.activities
+            ?.filter(m => m.questions && m.questions.length > 0) // só com questions
+            .map((m, idx) => (
+              <View
+                key={m.id}
+                style={[
+                  s.card,
+                  { backgroundColor: hardBg },
+                  idx > 0 && s.cardSeparated,
+                ]}
+              >
+                <View style={s.rowTop}>
+                  <Text style={[s.cardTitle, { color: hardText }]}>
+                    {m.title}
+                  </Text>
+
+                  <Pressable
+                    style={s.cta}
+                    onPress={() => goToExerciseFlow(nav.navigate, m.questions)}
+                  >
+                    <Text style={s.ctaText}>Entrar</Text>
+                  </Pressable>
+                </View>
+
+                {/* se quiser listar as questões: 
             {m.questions.map(l => (
               <Row key={l.id} lesson={l} />
             ))} 
             */}
-            </View>
-          ))}
-      </ScrollView>
+              </View>
+            ))}
+            </>):null
+            }
+        </ScrollView>
+      ) : (
+        <View style={{ marginTop: 32, alignItems: "center" }}>
+          <Text style={[s.cardSubtitle, { color: hardMuted, textAlign: "center" }]}>
+            Aguarde a atividades ficarem disponiveis
+          </Text>
+        </View>
+      )}
     </View>
   );
 
@@ -176,6 +201,12 @@ function Row({ lesson }: { lesson: Lesson }) {
 }
 
 const s = StyleSheet.create({
+    cardSubtitle: {
+    color: "#0F1E25",
+    fontSize: 15,
+    fontWeight: "700",
+    opacity: 0.9,
+  },
   title: {
     fontSize: 20,
     fontWeight: "800",
