@@ -324,14 +324,14 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 12,
     lineHeight: 20,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   overviewDescription: {
     fontSize: 14,
     lineHeight: 20,
     color: "#444",
     textAlign: "justify", 
-    marginBottom: 20,
+    marginBottom: 120,
   },
   overviewButton: {
     paddingVertical: 12,
